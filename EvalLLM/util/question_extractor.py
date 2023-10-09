@@ -54,7 +54,7 @@ class QuestionExtractor:
         # Make pairs of context, question, and answer
         pairs = []
         next_context = None
-        for i in range(len(questions)):
+        for i, question in enumerate(questions):
             if not next_context:
                 context = splits[i] if i < len(splits) else ""
             else:
