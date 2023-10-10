@@ -1,32 +1,30 @@
 import argparse
+import json
 import os
 import torch
 
 from EvalLLM import PromptCreator
-from llama.llama import Llama
+from llama import Llama
 
 
 def read_and_generate(args, prompt_creator) -> str:
     story_names = prompt_creator.get_story_names(data_location=args.prompts_dir)
-    all_prompts = prompt_creator.create_prompts(data_location=args.prompts_dir)
+    print(story_names)
+    all_prompts = prompt_creator.create_prompts(data_location=args.prompts_dir, max_seq_len=args.max_seq_len)
+    # TODO: remove the below line, doing just for 1 experiment
+    # story_names = ["Charmides."]
+    story_names = ["Cratylus."]
     for story_name in story_names:
+        print(f"Processing for story_name = {story_name}")
         prompts = all_prompts[story_name]["prompts"]
         targets = all_prompts[story_name]["targets"]
         generator = build_model(args)
-        generate_with_llama(generator=generator, prompts=prompts, targets=targets)
-
-        # prompts = []
-        # full_path = os.path.join(directory_path, csv_file)
-        # with open(full_path, mode='r') as file:
-        #     csv_reader = csv.reader(file)
-        #     for row in csv_reader:
-        #         output = f"Text: {row[1]}, Question: {row[2]}\n"
-        #         prompts.append(output)
-        # print(len(prompts))
-        # final_path = f"/scratch/sb7787/duygu/llama-results/{csv_file[:-4]}"
+        results = generate_with_llama(args=args, generator=generator, prompts=prompts, targets=targets)
+        with open(f"results/{story_name}.json", 'w') as f:
+            json.dump(results, f)
 
 
-def generate_with_llama(
+def generate_with_llama(args,
     generator,
     prompts,
     targets,
@@ -42,17 +40,12 @@ def generate_with_llama(
             temperature=temperature,
             top_p=top_p,
         )
-        results.append({"output": result[0]['generation'], "target": target})
-        results.append("==================================")
-        break
-
-    print(results)
-    # import numpy as np
-
-    # np.savetxt(f"{csv_file_name}-results.csv", results, delimiter=",", fmt='%s')
+        results.append({"prompt": prompt, "output": result[0]['generation'], "target": target})
+    return results
 
 
 def build_model(args):
+    torch.cuda.empty_cache()
     generator = Llama.build(
         ckpt_dir=args.ckpt_dir,
         tokenizer_path=args.tokenizer_path,
@@ -64,7 +57,7 @@ def build_model(args):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--prompts_dir', type=str, default='prompts/vol1')
+    parser.add_argument('--prompts_dir', type=str, default='/scratch/sb7787/sharvi/EvalLLM/prompts/vol1')
     parser.add_argument('--temperature', type=float, default=0.6)
     parser.add_argument('--top_p', type=float, default=0.9)
     parser.add_argument('--max_seq_len', type=int, default=4096)
