@@ -1,4 +1,5 @@
 import argparse
+import datetime
 import json
 import os
 import torch
@@ -7,21 +8,29 @@ from EvalLLM import PromptCreator
 from llama import Llama
 
 
-def read_and_generate(args, prompt_creator) -> str:
-    story_names = prompt_creator.get_story_names(data_location=args.prompts_dir)
-    print(story_names)
+def read_and_generate(args, prompt_creator, story_name: str = "Charmides.") -> str:
+    # story_names = prompt_creator.get_story_names(data_location=args.prompts_dir)
+    # print(f"story_names = {story_names}")
+    
     all_prompts = prompt_creator.create_prompts(data_location=args.prompts_dir, max_seq_len=args.max_seq_len)
     # TODO: remove the below line, doing just for 1 experiment
-    # story_names = ["Charmides."]
-    story_names = ["Cratylus."]
+    # story_names = ["Charmides."] Cratylus
+    # ['Euthydemus.', 'Cratylus.', 'Lysis.', 'Symposium.', 'Laches.', 'Phaedrus.', 'Ion.', 'Charmides.', 'Protagoras.']
+    story_names = [story_name]
+    
+    # create the results folder
+    results_dir = os.path.join("results/", datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S'))
+    os.makedirs(results_dir)
+
     for story_name in story_names:
         print(f"Processing for story_name = {story_name}")
         prompts = all_prompts[story_name]["prompts"]
         targets = all_prompts[story_name]["targets"]
         generator = build_model(args)
         results = generate_with_llama(args=args, generator=generator, prompts=prompts, targets=targets)
-        with open(f"results/{story_name}.json", 'w') as f:
+        with open(f"{results_dir}/{story_name}.json", 'w') as f:
             json.dump(results, f)
+        generator = None
 
 
 def generate_with_llama(args,
@@ -66,19 +75,24 @@ def main():
     parser.add_argument(
         '--ckpt_dir',
         type=str,
-        default="/vast/work/public/ml-datasets/llama-2/llama-2-7b",
+        default="/vast/work/public/ml-datasets/llama-2/llama-2-13b",
     )
     parser.add_argument(
         '--tokenizer_path',
         type=str,
         default="/vast/work/public/ml-datasets/llama-2/tokenizer.model",
     )
+    parser.add_argument(
+        '--story_name',
+        type=str,
+        default="Charmides.",
+    )
     args = parser.parse_args()
 
     torch.cuda.empty_cache()
 
     prompt_creator = PromptCreator()
-    read_and_generate(args, prompt_creator)
+    read_and_generate(args, prompt_creator, args.story_name)
 
 
 if __name__ == "__main__":
