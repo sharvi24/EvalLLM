@@ -5,11 +5,11 @@ import os
 import re
 
 
-class PromptCreator:
+class PromptCreator4GPT:
     def __init__(self) -> None:
         pass
 
-    def get_story_names(self, data_location: str = 'prompts/vol1'):
+    def get_story_names(self, data_location: str = 'dataset/vol1'):
         story_files = glob.glob(f"{data_location}/*.json")
         story_names = [
             os.path.splitext(os.path.basename(sf))[0] for sf in story_files
@@ -27,7 +27,9 @@ class PromptCreator:
         text = text.replace("\n", "")
         return text
 
-    def create_prompts(self, data_location: str = 'prompts/vol1', max_seq_len=1024):
+    def create_prompts_cot(
+        self, data_location: str = 'dataset/vol1', max_seq_len=100000
+    ):
         story_files = self.get_stories_paths(data_location=data_location)
         all_prompts = {}
         for story_file in story_files:
@@ -57,15 +59,11 @@ class PromptCreator:
                     prompts.extend(split_prompts)
                     targets.extend(split_targets)
                 else:
-                    prompt += f"I will give you a passage and a question, please provide a precise answer. Passage: {context}"
+                    prompt += f"I will give you a passage and a question, you are an expert in this, please provide a precise answer. Passage: {context} "
 
-                prompt += f" Based on the previous context answer this question: {question}"
-                prompt += ". Provide answer for the question using the context in 1 of 3 options"
-                prompt += (
-                    " (Make sure to start with option number in your response):"
-                )
-                prompt += " 1. Write an Answer, 2. True or False, "
-                prompt += " 3. If given passage is insufficient to answer this question, say it."
+                prompt += f" Question: {question}"
+                prompt += " Do you think the given passage is sufficient to answer this question, yes or no?"
+                prompt += " If yes, first give step-by-step reasoning about how to answer the question. Then output the answer."
                 target = obj['answer']
                 prompts.append(prompt)
                 targets.append(target)
