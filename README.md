@@ -9,7 +9,8 @@
 I will give you a passage and a question, you are an expert in this, please provide a precise answer. 
 Passage: <passage>  
 Question: <question> 
-Do you think the given passage is sufficient to answer this question, yes or no? If yes, first give step-by-step reasoning about how to answer the question. Then output the answer."
+Do you think the given passage is sufficient to answer this question, yes or no? 
+If yes, first give step-by-step reasoning about how to answer the question. Then output the answer."
 ```
 
 ### Evaluation prompts
