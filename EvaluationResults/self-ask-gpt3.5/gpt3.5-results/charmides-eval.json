@@ -1,0 +1,38 @@
+[
+    {
+        "reasons": [
+            "The response provides a detailed and accurate analysis of the given passage from Plato's 'Charmides.'",
+            "It breaks down the passage and provides step-by-step reasoning to explain the riddle, highlighting the various attempts made by Charmides to define temperance and the challenges presented by Socrates.",
+            "The response correctly identifies the subject of the dialogue as 'Temperance' or 'σωφροσύνη' and provides context about its meaning in Greek philosophy.",
+            "The response correctly identifies the distinction made by Critias between 'making' and 'doing' and the misapplied quotation from Hesiod.",
+            "The response successfully interprets the complexity and nuances of the concept of temperance as presented in the passage.",
+            "The response aligns with the content and themes of the target answer.",
+            "The response does not contain any inaccuracies or contradictions with the target answer."
+        ],
+        "match-percent": 100
+    },
+    {
+        "reasons": [
+            "The response provides a detailed and accurate analysis of the given passage from Plato's 'Charmides.'",
+            "It breaks down the passage and provides step-by-step reasoning to explain the content and themes of the passage.",
+            "The response correctly identifies the various attempts to define temperance in the dialogue, including Socrates' proposal that temperance is self-knowledge.",
+            "The response accurately identifies the debate surrounding the relationship between knowledge, good, and the utility of knowledge of knowledge, as presented in the passage.",
+            "The response successfully interprets the nuanced exploration of the connection between good and knowledge in the dialogue.",
+            "The response aligns with the content and themes of the target answer.",
+            "The response does not contain any inaccuracies or contradictions with the target answer.",
+            "Overall, the response effectively summarizes the key points and themes of the passage and its relevance to Plato's stance on the relationship between good and knowledge."
+        ],
+        "match-percent": 100
+    },
+    {
+        "reasons": [
+            "The response correctly identifies that the passage is insufficient to answer the question about the identity of the beautiful youth's father.",
+            "The response provides a clear and accurate explanation for why the passage is insufficient.",
+            "It correctly points out that the passage focuses on Socrates' visit to the palaestra and the conversation with his friends but does not contain information about the youth's father.",
+            "The response aligns with the content and themes of the target answer.",
+            "The response does not contain any inaccuracies or contradictions with the target answer.",
+            "Overall, the response effectively highlights the insufficiency of the passage in providing information about the beautiful youth's father."
+        ],
+        "match-percent": -100
+    }
+]
