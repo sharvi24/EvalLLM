@@ -9,14 +9,14 @@ class PromptCreator:
     def __init__(self) -> None:
         pass
 
-    def get_story_names(self, data_location: str = 'prompts/vol1'):
+    def get_story_names(self, data_location: str = 'dataset/vol1'):
         story_files = glob.glob(f"{data_location}/*.json")
         story_names = [
             os.path.splitext(os.path.basename(sf))[0] for sf in story_files
         ]
         return story_names
 
-    def get_stories_paths(self, data_location: str = 'prompts/vol1'):
+    def get_stories_paths(self, data_location: str = 'dataset/vol1'):
         story_files = glob.glob(f"{data_location}/*.json")
         return story_files
 
@@ -27,7 +27,7 @@ class PromptCreator:
         text = text.replace("\n", "")
         return text
 
-    def create_prompts(self, data_location: str = 'prompts/vol1', max_seq_len=1024):
+    def create_prompts(self, data_location: str = 'dataset/vol1', max_seq_len=1024):
         story_files = self.get_stories_paths(data_location=data_location)
         all_prompts = {}
         for story_file in story_files:
